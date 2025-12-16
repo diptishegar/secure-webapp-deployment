@@ -1,0 +1,43 @@
+services:
+  flaskapp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: flaskapp
+    ports:
+      - "5000:5000"
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+    networks:
+      - flaskapp-network
+    depends_on:
+      - db-mysql
+
+  db-mysql:
+    image: mysql:latest
+    container_name: mysql-container
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 3
+    networks:
+      - flaskapp-network
+      
+networks:
+  flaskapp-network:
+    driver: bridge
+
+volumes:
+  mysql-data:
