@@ -1,0 +1,10 @@
+/tests
+/creds
+*.pem
+.env    
+*.md
+*.yaml
+*.yml
+__pycache__/
+*.sh
+.gitignore
