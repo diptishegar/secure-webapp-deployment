@@ -8,41 +8,73 @@ on:
         - master
     workflow_dispatch:
  
-env:
-  AWS_REGION: us-east-1
-  ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
-  IMAGE_TAG: ${{ github.sha }}
+permissions:
+  id-token: write   # REQUIRED for OIDC
+  contents: read
 
-  
 jobs:
-  build-and-push:
-    if: contains(github.event.head_commit.message, '[ci build]')
+  unit-tests:
+    if: contains(github.event.head_commit.message, '[ci-run]')
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.8'
+
+      - name: Install deps
+        run: |
+          pip install -r requirements.txt
+          pip install pytest
+
+      - name: Run unit tests
+        run: pytest tests/unit
+
+
+  integration-tests:
+    needs: unit-tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build & run test stack
+        run: docker compose -f tests/docker-compose-test.yaml up -d --build
+
+      - name: Run integration tests
+        run: |
+          pip install pytest requests
+          pytest tests/integration
+
+      - name: Cleanup
+        run: docker compose -f tests/docker-compose-test.yaml down
+
+
+  build-and-push:
+    needs: integration-tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v2
+        uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.AWS_REGION }}
+            role-to-assume: arn:aws:iam::$ACCOUNT_ID:role/ECRFullaccess-github
+            aws-region: $REGION_NAME
 
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Build Docker image
+      - name: Login to ECR
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build image
         run: |
-          REGISTRY=${{ steps.login-ecr.outputs.registry }}
-          IMAGE=${REGISTRY}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
-          echo "Building image $IMAGE"
-          docker build -t "$IMAGE" .
+          docker build -t myapp:v1 .
 
-      - name: Push image to ECR
+      - name: Tag & push
         run: |
-          REGISTRY=${{ steps.login-ecr.outputs.registry }}
-          IMAGE=${REGISTRY}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
-          echo "Pushing $IMAGE to ECR"
-          docker push "$IMAGE"
+          docker tag myapp:v1 $ECR_REPO:v1
+          docker push $ECR_REPO:v1
