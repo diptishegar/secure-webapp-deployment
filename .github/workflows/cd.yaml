@@ -33,7 +33,7 @@ jobs:
             aws ecr get-login-password --region ${{ env.REGION_NAME }} \
               | docker login --username AWS --password-stdin ${{ env.ECR_REPO_NAME }}
 
-            cd /secure-webapp-deployment
+            cd /home/ubuntu/secure-webapp-deployment
 
             docker compose pull flaskapp
             docker compose up -d flaskapp
