@@ -36,10 +36,10 @@ Best Practices :
 
 **Snapshots :**
 1. Cloudflare DNS Record configuration \
-![cloudflare](screenshots/cloudflare.png)
+![cloudflare](./screenshots/cloudflare.png)
 
 2. CI Github Actions workflow \
-![ci](screenshots/ci-workflow.png)
+![ci](./screenshots/ci-workflow.png)
 
 3. CD Github Actions workflow \
-![cd](screenshots/cd-workflow.png)
+![cd](./screenshots/cd-workflow.png)
