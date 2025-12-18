@@ -33,3 +33,13 @@ Best Practices :
 * Docker app bound to localhost only
 * No certs stored on EC2
 * Cloudflare handles HTTPS, HSTS, WAF
+
+**Snapshots :**
+1. Cloudflare DNS Record configuration \
+![cloudflare](screenshots/cloudflare.png)
+
+2. CI Github Actions workflow \
+![ci](screenshots/ci-workflow.png)
+
+3. CD Github Actions workflow \
+![cd](screenshots/cd-workflow.png)
