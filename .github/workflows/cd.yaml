@@ -34,6 +34,6 @@ jobs:
               | docker login --username AWS --password-stdin ${{ env.ECR_REPO_NAME }}
 
             cd /secure-webapp-deployment
-            
-            docker compose pull
-            docker compose up -d
+
+            docker compose pull flaskapp
+            docker compose up -d flaskapp
