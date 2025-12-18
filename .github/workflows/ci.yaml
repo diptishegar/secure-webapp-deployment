@@ -16,7 +16,7 @@ jobs:
   unit-tests:
     if: |
         github.event_name == 'workflow_dispatch' ||
-        contains(github.event.head_commit.message, '[ci-run]')
+        contains(github.event.head_commit.message, 'ci-run')
     runs-on: ubuntu-latest
 
     steps:
