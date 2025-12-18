@@ -65,7 +65,7 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-            role-to-assume: arn:aws:iam::$ACCOUNT_ID:role/ECRFullaccess-github
+            role-to-assume: arn:aws:iam::${{ secrets.ACCOUNT_ID }}:role/ECRFullaccess-github
             aws-region: ${{ secrets.REGION_NAME }}
 
 
@@ -78,5 +78,5 @@ jobs:
 
       - name: Tag & push
         run: |
-          docker tag myapp:v1 $ECR_REPO:v1
-          docker push $ECR_REPO:v1
+          docker tag myapp:v1 ${{ secrets.ECR_REPO }}:v1
+          docker push ${{ secrets.ECR_REPO }}:v1
