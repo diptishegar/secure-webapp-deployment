@@ -1,10 +1,8 @@
 import sys
 import os
-
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
-
-
 import app
+from mysql.connector import Error
 from unittest.mock import patch, MagicMock
 
 def test_get_db_connection_success():
@@ -14,10 +12,12 @@ def test_get_db_connection_success():
         assert conn is not None
 
 
-def test_get_db_connection_failure():
-    with patch("mysql.connector.connect", side_effect=Exception("DB down")):
-        conn = app.get_db_connection()
-        assert conn is None
+
+@patch("mysql.connector.connect", side_effect=Error("DB down"))
+def test_get_db_connection_failure(mock_connect):
+    conn = app.get_db_connection()
+    assert conn is None
+
 
 
 def test_get_user_data_no_connection():
