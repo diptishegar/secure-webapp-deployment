@@ -1,4 +1,4 @@
-name: CI Pipeline to build, test & push Docker image to ECR
+name: CI Pipeline to build, test & push image to ECR
 on:
     push:
         branches:

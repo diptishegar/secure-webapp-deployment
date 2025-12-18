@@ -1,8 +1,6 @@
 services:
   flaskapp:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: ${ECR_REPO_NAME}:v1
     container_name: flaskapp
     ports:
       - "5000:5000"
