@@ -118,7 +118,7 @@ def index():
                 <h1>{{ name }}'s Favorite Movies</h1>
                 
                 {% if movies %}
-                    <h2>Movie Collection</h2>
+                    <h2><i>Movie Collection</i></h2>
                     <ul>
                         {% for movie in movies %}
                             <li>
