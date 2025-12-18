@@ -14,8 +14,8 @@ permissions:
 
 env:
     REGION_NAME: ${{ vars.REGION_NAME }}
-    GITHUB_ECR_ROLE_ARN: ${{ vars.GITHUB_ECR_ROLE_ARN }}
-    ECR_REPO_NAME: ${{ vars.ECR_REPO_NAME }}
+    GITHUB_ECR_ROLE_ARN: ${{ secrets.ECR_GITHUBACTIONS_ROLE_ARN }}
+    ECR_REPO_NAME: ${{ secrets.ECR_REPO_NAME }}
 
 jobs:
   unit-tests:
