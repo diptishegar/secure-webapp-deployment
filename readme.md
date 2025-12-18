@@ -35,11 +35,14 @@ Best Practices :
 * Cloudflare handles HTTPS, HSTS, WAF
 
 **Snapshots :**
-1. Cloudflare DNS Record configuration \
+1. Cloudflare DNS Record configuration 
 ![cloudflare](./screenshots/cloudflare.png)
 
-2. CI Github Actions workflow \
-![ci](./screenshots/ci-workflow.png)
+2. CI Github Actions workflow 
+![ci-wf](./screenshots/ci-workflow.png)
 
-3. CD Github Actions workflow \
-![cd](./screenshots/cd-workflow.png)
+3. CD Github Actions workflow 
+![cd-wf](./screenshots/cd-workflow.png)
+
+4. Website hosted on Godaddy domain (https://dssinfo.xyz)
+![webapp](./screenshots/website.png)
