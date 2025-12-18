@@ -9,7 +9,7 @@ on:
     workflow_dispatch:
  
 permissions:
-  id-token: write   # REQUIRED for OIDC
+  id-token: write 
   contents: read
 
 jobs:
