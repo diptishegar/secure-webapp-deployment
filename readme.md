@@ -1,6 +1,6 @@
 ### Deploy application using AWS EC2, Docker, Nginx, securely using SSL/TLS certificate, Cloudflare | End-to-end automated CI/CD setup with Github Actions.
 
-📍 **Project Objective :** _Deploy python application using real-world approach securely on AWS EC2 & automating CI/CD using Github Actions._
+📍 **Project Objective :** _Deploy a python application using real-world approach securely on AWS EC2 & automating CI/CD using Github Actions._
 _The application is exposed through Nginx as a reverse proxy, mapped to a custom domain using GoDaddy, and secured with Cloudflare for HTTPS traffic only, DNS protection, and traffic filtering. The setup focuses on security, scalability, and production-grade access patterns commonly used in real deployments._
 
 💡 Key Learnings :

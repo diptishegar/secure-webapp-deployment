@@ -1,0 +1,48 @@
+name: CI Pipeline to build, test & push Docker image to ECR
+on:
+    push:
+        branches:
+        - master
+    pull_request:
+        branches:   
+        - master
+    workflow_dispatch:
+ 
+env:
+  AWS_REGION: us-east-1
+  ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
+  IMAGE_TAG: ${{ github.sha }}
+
+  
+jobs:
+  build-and-push:
+    if: contains(github.event.head_commit.message, '[ci build]')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build Docker image
+        run: |
+          REGISTRY=${{ steps.login-ecr.outputs.registry }}
+          IMAGE=${REGISTRY}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
+          echo "Building image $IMAGE"
+          docker build -t "$IMAGE" .
+
+      - name: Push image to ECR
+        run: |
+          REGISTRY=${{ steps.login-ecr.outputs.registry }}
+          IMAGE=${REGISTRY}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
+          echo "Pushing $IMAGE to ECR"
+          docker push "$IMAGE"
