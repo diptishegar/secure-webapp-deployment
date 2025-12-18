@@ -12,6 +12,11 @@ permissions:
   id-token: write 
   contents: read
 
+env:
+    REGION_NAME: ${{ vars.REGION_NAME }}
+    GITHUB_ECR_ROLE_ARN: ${{ vars.GITHUB_ECR_ROLE_ARN }}
+    ECR_REPO_NAME: ${{ vars.ECR_REPO_NAME }}
+
 jobs:
   unit-tests:
     if: |
@@ -65,8 +70,8 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-            role-to-assume: arn:aws:iam::${{ secrets.ACCOUNT_ID }}:role/ECRFullaccess-github
-            aws-region: ${{ secrets.REGION_NAME }}
+            role-to-assume: ${{ env.GITHUB_ECR_ROLE_ARN }}
+            aws-region: ${{ env.REGION_NAME }}
 
 
       - name: Login to ECR
@@ -78,5 +83,5 @@ jobs:
 
       - name: Tag & push
         run: |
-          docker tag myapp:v1 ${{ secrets.ECR_REPO }}:v1
-          docker push ${{ secrets.ECR_REPO }}:v1
+          docker tag myapp:v1 ${{ env.ECR_REPO_NAME }}:v1
+          docker push ${{ env.ECR_REPO_NAME }}:v1
