@@ -15,7 +15,7 @@ permissions:
 env:
     REGION_NAME: ${{ vars.REGION_NAME }}
     GITHUB_ECR_ROLE_ARN: ${{ secrets.ECR_GITHUBACTIONS_ROLE_ARN }}
-    ECR_REPO_NAME: ${{ secrets.ECR_REPO_NAME }}
+    ECR_REPO: ${{ secrets.ECR_REPO }}
 
 jobs:
   unit-tests:
@@ -83,5 +83,5 @@ jobs:
 
       - name: Tag & push
         run: |
-          docker tag myapp:v1 ${{ env.ECR_REPO_NAME }}:v1
-          docker push ${{ env.ECR_REPO_NAME }}:v1
+          docker tag myapp:v1 ${{ env.ECR_REPO }}:v1
+          docker push ${{ env.ECR_REPO }}:v1
